@@ -28,7 +28,6 @@
     try {
       const response = await axios.get(apiDataCard);
       dataCard.value = response.data;
-      console.log(dataCard.value);
     } catch (error) {
       console.error(error);
     } finally {
