@@ -1,2 +1,9 @@
 @import 'reset.scss';
 @import 'tailwind.scss';
+
+.isLoading {
+  opacity: 0.5;
+  filter: blur(1px);
+  pointer-events: none;
+  user-select: none;
+}
