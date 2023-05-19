@@ -14,24 +14,13 @@
 </template>
 
 <script setup>
-  import { onMounted, ref } from 'vue';
+  import { onMounted } from 'vue';
   import ProductCard from '@/components/ProductCard.vue';
-  import { setData } from '@/api/apiDataCard.js';
+  import { useDataCard } from '@/hooks/useDataCard.js';
 
-  const dataCard = ref([]);
-
-  const isLoading = ref(false);
-
-  const init = async () => {
-    isLoading.value = true;
-    try {
-      const result = await setData();
-      dataCard.value = result.data;
-    } catch (error) {
-      console.error(error);
-    } finally {
-      isLoading.value = false;
-    }
+  const { dataCard, isLoading, setData } = useDataCard();
+  const init = () => {
+    setData();
   };
 
   onMounted(init);
