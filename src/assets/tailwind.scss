@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .input-class {
+    @apply w-[300px] h-8 border-2 rounded-md focus:outline-none focus:border-blue-400 p-1;
+  }
+
+  .error-message {
+    @apply text-xs text-center mb-2 text-red-500 pt-1
+  }
+
+  .invalid-input {
+    @apply border border-red-500;
+  }
+}
