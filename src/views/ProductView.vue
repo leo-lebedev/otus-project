@@ -2,14 +2,9 @@
   <BaseLayout>
     <div>
       <div class="flex items-center justify-center my-6">
-        <input v-model="searchQuery" class="input-class mr-4" placeholder="Поиск по цене или названию" type="text" />
+        <SearchInput v-model="searchQuery" class="mr-4" />
 
-        <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded"
-          @click="isProductModal = true"
-        >
-          Добавить товар
-        </button>
+        <ProductButton @click="isProductModal = true">Добавить товар</ProductButton>
       </div>
 
       <p v-if="isLoading" class="text-center text-xl mt-8">Идет загрузка...</p>
@@ -33,6 +28,8 @@
   import ProductCard from '@/components/ProductCard.vue';
   import { useDataCard } from '@/hooks/useDataCard.js';
   import BaseLayout from '@/layout/BaseLayout.vue';
+  import SearchInput from '@/components/SearchInput.vue';
+  import ProductButton from '@/components/ProductButton.vue';
 
   const AddProductModal = defineAsyncComponent(() => import('@/components/AddProductModal.vue'));
 
@@ -49,7 +46,8 @@
     }
 
     return dataCard.value.filter(
-      (item) => item.title.toLowerCase().includes(searchValue) || item.price.toString().includes(searchValue)
+      (item) =>
+        item.title.toLowerCase().includes(searchValue) || item.price.toString().toLowerCase().startsWith(searchValue)
     );
   });
 

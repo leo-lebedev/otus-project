@@ -5,11 +5,11 @@
         <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
       </div>
 
-      <div class="bg-white rounded-lg p-8 max-w-[500px] mx-auto z-50">
+      <form class="bg-white rounded-lg p-8 max-w-[500px] mx-auto z-50" @submit.prevent="createProduct">
         <h2 class="text-center text-2xl my-3">Create Product</h2>
         <div>
           <div class="mb-2 flex justify-between">
-            <label for="name">Name:</label>
+            <label for="name">Name<span class="text-red-500">*</span>:</label>
             <input
               id="name"
               v-model="product.name"
@@ -20,7 +20,7 @@
           </div>
           <p v-show="$v.name.required.$invalid" class="error-message">Поле обязательно</p>
           <div class="mb-2 flex justify-between">
-            <label for="email">Email:</label>
+            <label for="email">Email<span class="text-red-500">*</span>:</label>
             <input
               id="email"
               v-model="product.email"
@@ -31,7 +31,7 @@
           </div>
           <p v-show="$v.email.required.$invalid" class="error-message">Поле обязательно</p>
           <div class="mb-2 flex justify-between">
-            <label for="title">Title:</label>
+            <label for="title">Title<span class="text-red-500">*</span>:</label>
             <input
               id="title"
               v-model="product.title"
@@ -42,7 +42,7 @@
           </div>
           <p v-show="$v.title.required.$invalid" class="error-message">Поле обязательно</p>
           <div class="mb-2 flex justify-between">
-            <label for="price">Price:</label>
+            <label for="price">Price<span class="text-red-500">*</span>:</label>
             <input
               id="price"
               v-model="product.price"
@@ -53,7 +53,7 @@
           </div>
           <p v-show="$v.price.required.$invalid" class="error-message">Поле обязательно</p>
           <div class="mb-2 flex justify-between">
-            <label for="description">Description:</label>
+            <label for="description">Description<span class="text-red-500">*</span>:</label>
             <input
               id="description"
               v-model="product.description"
@@ -63,7 +63,7 @@
           </div>
           <p v-show="$v.description.required.$invalid" class="error-message">Поле обязательно</p>
           <div class="mb-2 flex justify-between">
-            <label for="category">Category:</label>
+            <label for="category">Category<span class="text-red-500">*</span>:</label>
             <input
               id="category"
               v-model="product.category"
@@ -74,19 +74,12 @@
           </div>
           <p v-show="$v.category.required.$invalid" class="error-message">Поле обязательно</p>
           <div class="mb-2 flex justify-between">
-            <label for="rate">Rating Rate:</label>
-            <input
-              id="rate"
-              v-model="product.rating.rate"
-              :class="{ 'invalid-input': $v.rating.rate.required.$invalid }"
-              class="input-class ml-3"
-              step="0.1"
-              type="number"
-            />
+            <label>Rating Rate<span class="text-red-500">*</span>:</label>
+            <StarRating v-model="product.rating.rate" />
           </div>
           <p v-show="$v.rating.rate.required.$invalid" class="error-message">Поле обязательно</p>
           <div class="mb-2 flex justify-between">
-            <label for="count">Rating Count:</label>
+            <label for="count">Rating Count<span class="text-red-500">*</span>:</label>
             <input
               id="count"
               v-model="product.rating.count"
@@ -98,7 +91,7 @@
           <p v-show="$v.rating.count.required.$invalid" class="error-message">Поле обязательно</p>
         </div>
         <div class="mb-2 flex justify-between">
-          <label for="agreement">согласие на обработку данных:</label>
+          <label for="agreement">Согласие на обработку данных<span class="text-red-500">*</span>:</label>
           <input
             id="agreement"
             v-model="product.agreement"
@@ -109,22 +102,10 @@
         </div>
 
         <div class="flex justify-end">
-          <button
-            class="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-6"
-            @click="closeModal"
-          >
-            Отмена
-          </button>
-          <button
-            :class="{ 'bg-blue-200 hover:bg-blue-200': $v.$invalid, 'bg-blue-500 hover:bg-blue-700': !$v.$invalid }"
-            :disabled="$v.$invalid"
-            class="mt-4 text-white font-bold py-2 px-4 rounded"
-            @click="createProduct"
-          >
-            Создать Товар
-          </button>
+          <ProductButton class="mr-4" mode="danger" @click="closeModal"> Отмена</ProductButton>
+          <ProductButton :disabled="$v.$invalid" type="submit">Создать Товар</ProductButton>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </template>
@@ -132,7 +113,9 @@
 <script setup>
   import { reactive } from 'vue';
   import { useVuelidate } from '@vuelidate/core';
-  import { email, required } from '@vuelidate/validators';
+  import { alpha, email, maxValue, minValue, numeric, required } from '@vuelidate/validators';
+  import ProductButton from '@/components/ProductButton.vue';
+  import StarRating from '@/components/StarRating.vue';
 
   const emit = defineEmits(['close-modal', 'add-product']);
 
@@ -153,20 +136,34 @@
   });
 
   const rules = {
-    title: { required },
-    price: { required },
-    description: { required },
-    category: { required },
+    title: { required, alpha },
+    price: { required, numeric },
+    description: { required, alpha },
+    category: { required, alpha },
     rating: {
-      rate: { required },
-      count: { required },
+      rate: { required, minValue: minValue(0), maxValue: maxValue(5) },
+      count: { required, numeric },
     },
-    name: { required },
+    name: { required, alpha },
     email: { required, email },
     agreement: { required },
   };
 
-  const $v = useVuelidate(rules, product);
+  const $v = useVuelidate(rules, product, { $autoDirty: true });
+
+  const productReset = () => {
+    product.id = null;
+    product.title = '';
+    product.price = null;
+    product.description = '';
+    product.category = '';
+    product.image = 'http://cartopen.ru/image/cache/catalog/no-image-1300x760.jpg';
+    product.rating.rate = null;
+    product.rating.count = null;
+    product.name = '';
+    product.email = '';
+    product.agreement = false;
+  };
 
   const closeModal = () => {
     emit('close-modal');
@@ -175,5 +172,6 @@
   const createProduct = () => {
     emit('add-product', product);
     emit('close-modal');
+    productReset();
   };
 </script>
