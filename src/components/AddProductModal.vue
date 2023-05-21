@@ -151,20 +151,6 @@
 
   const $v = useVuelidate(rules, product, { $autoDirty: true });
 
-  const productReset = () => {
-    product.id = null;
-    product.title = '';
-    product.price = null;
-    product.description = '';
-    product.category = '';
-    product.image = 'http://cartopen.ru/image/cache/catalog/no-image-1300x760.jpg';
-    product.rating.rate = null;
-    product.rating.count = null;
-    product.name = '';
-    product.email = '';
-    product.agreement = false;
-  };
-
   const closeModal = () => {
     emit('close-modal');
   };
@@ -172,6 +158,5 @@
   const createProduct = () => {
     emit('add-product', product);
     emit('close-modal');
-    productReset();
   };
 </script>
