@@ -4,7 +4,8 @@
       <div class="flex items-center justify-center my-6">
         <SearchInput v-model="searchQuery" class="mr-4" />
 
-        <ProductButton @click="isProductModal = true">Добавить товар</ProductButton>
+        <ProductButton v-if="isAdmin" @click="isProductModal = true">Добавить товар</ProductButton>
+        <p v-else>Товар может добавить только Администратор</p>
       </div>
 
       <p v-if="isLoading" class="text-center text-xl mt-8">Идет загрузка...</p>
@@ -38,6 +39,10 @@
   const searchQuery = ref('');
 
   const isProductModal = ref(false);
+
+  // const userType = localStorage.getItem('userType');
+
+  const isAdmin = computed(() => localStorage.getItem('userType') === 'admin');
 
   const filteredItems = computed(() => {
     const searchValue = searchQuery.value.toLowerCase();
