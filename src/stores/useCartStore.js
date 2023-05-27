@@ -5,11 +5,6 @@ export const useCartStore = defineStore({
   state: () => ({
     items: [],
   }),
-  getters: {
-    totalItemsPrice() {
-      return this.items.reduce((acc, item) => acc + item.price, 0);
-    },
-  },
   actions: {
     addToCart(item) {
       this.items.push(item);

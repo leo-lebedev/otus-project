@@ -33,7 +33,7 @@
           </tbody>
         </table>
         <div class="text-right">
-          <p class="text-2xl font-bold">Total: ${{ cartStore.totalItemsPrice }}</p>
+          <p class="text-2xl font-bold">Total: ${{ totalCost }}</p>
         </div>
       </div>
       <button class="bg-blue-500 text-white py-1 px-4 rounded-md focus:outline-none hover:bg-blue-700" @click="goBack">
@@ -46,10 +46,14 @@
 <script setup>
   import BaseLayout from '@/layout/BaseLayout.vue';
   import { useCartStore } from '@/stores/useCartStore';
-  import { onMounted } from 'vue';
   import router from '@/router';
+  import { computed } from 'vue';
 
   const cartStore = useCartStore();
+
+  const totalCost = computed(() => {
+    return cartStore.items.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
+  });
 
   const handleRemoveItem = (index) => {
     cartStore.removeFromCart(index);
@@ -58,10 +62,6 @@
   const goBack = () => {
     router.go(-1);
   };
-
-  onMounted(() => {
-    // ...
-  });
 </script>
 
 <style lang="scss" scoped>
