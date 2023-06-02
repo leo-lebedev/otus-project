@@ -9,12 +9,18 @@
       </ul>
     </nav>
 
-    <button class="hover:text-gray-300" @click="handleLogout">Logout</button>
+    <div class="flex items-center">
+      <p class="mr-2 text-sm">{{ login.email }}</p>
+      <button class="hover:text-gray-300" @click="handleLogout">Logout</button>
+    </div>
   </div>
 </template>
 
 <script setup>
   import { useRouter } from 'vue-router';
+  import { useAuthStore } from '@/stores/useLoginAuth';
+
+  const login = useAuthStore();
 
   const mainNav = [
     {

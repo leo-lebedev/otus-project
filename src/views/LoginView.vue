@@ -4,7 +4,7 @@
       <label class="block mb-2">
         <span class="text-gray-700">Email:</span>
         <input
-          v-model="email"
+          v-model="login.email"
           class="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm"
           required
           type="email"
@@ -14,8 +14,8 @@
         <span class="text-gray-700">Password:</span>
         <div class="relative">
           <input
-            v-model="password"
-            :type="showPassword ? 'text' : 'password'"
+            v-model="login.password"
+            :type="login.showPassword ? 'text' : 'password'"
             class="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm"
             required
           />
@@ -24,7 +24,7 @@
               class="h-6 w-6 text-gray-700 hover:text-gray-600 fill-current"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
-              @click="showPassword = !showPassword"
+              @click="login.showPassword = !login.showPassword"
             >
               <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
               <path
@@ -37,30 +37,26 @@
         </div>
       </label>
       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Login</button>
-      <span v-if="error" class="text-red-500">Invalid email or password</span>
+      <span v-if="login.error" class="text-red-500">Invalid email or password</span>
     </form>
   </div>
 </template>
 
 <script setup>
-  import { ref } from 'vue';
-  import { useRouter } from 'vue-router';
+  import { useAuthStore } from '@/stores/useLoginAuth';
+  import router from '@/router';
 
-  const email = ref('');
-  const password = ref('');
-  const showPassword = ref(false);
-  const error = ref(false);
-  const router = useRouter();
+  const login = useAuthStore();
 
   const handleSubmit = () => {
-    if (email.value === 'admin@example.com' && password.value === 'password') {
+    if (login.email === 'admin@example.com' && login.password === 'password') {
       localStorage.setItem('userType', 'admin');
       router.push('/home');
-    } else if (email.value === 'user@example.com' && password.value === 'password') {
+    } else if (login.email === 'user@example.com' && login.password === 'password') {
       localStorage.setItem('userType', 'user');
       router.push('/home');
     } else {
-      error.value = true;
+      login.error = true;
     }
   };
 </script>
