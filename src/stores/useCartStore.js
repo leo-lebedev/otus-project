@@ -5,6 +5,11 @@ export const useCartStore = defineStore({
   state: () => ({
     items: [],
   }),
+  getters: {
+    totalCost: (state) => {
+      return state.items.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
+    },
+  },
   actions: {
     addToCart(item) {
       this.items.push(item);

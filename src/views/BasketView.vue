@@ -20,7 +20,7 @@
               </td>
               <td class="py-2 text-center">$ {{ item.price }}</td>
               <td class="py-2 text-center">{{ item.quantity }}</td>
-              <td class="py-2 text-center">$ {{ item.price * item.quantity }}</td>
+              <td class="py-2 text-center">$ {{ (item.price * item.quantity).toFixed(2) }}</td>
               <td class="py-2 text-center">
                 <button
                   class="bg-red-500 text-white py-1 px-3 rounded-md focus:outline-none"
@@ -33,7 +33,7 @@
           </tbody>
         </table>
         <div class="text-right">
-          <p class="text-2xl font-bold">Total: ${{ totalCost }}</p>
+          <p class="text-2xl font-bold">Total: ${{ cartStore.totalCost }}</p>
         </div>
       </div>
       <button class="bg-blue-500 text-white py-1 px-4 rounded-md focus:outline-none hover:bg-blue-700" @click="goBack">
@@ -47,13 +47,8 @@
   import BaseLayout from '@/layout/BaseLayout.vue';
   import { useCartStore } from '@/stores/useCartStore';
   import router from '@/router';
-  import { computed } from 'vue';
 
   const cartStore = useCartStore();
-
-  const totalCost = computed(() => {
-    return cartStore.items.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
-  });
 
   const handleRemoveItem = (index) => {
     cartStore.removeFromCart(index);
