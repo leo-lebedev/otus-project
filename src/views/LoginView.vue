@@ -1,6 +1,6 @@
 <template>
   <div class="grid place-items-center h-screen">
-    <form class="max-w-sm mx-auto my-8 w-full" @submit.prevent="handleSubmit">
+    <form class="max-w-sm mx-auto my-8 w-full" @submit.prevent="login.handleSubmit">
       <label class="block mb-2">
         <span class="text-gray-700">Email:</span>
         <input
@@ -44,19 +44,6 @@
 
 <script setup>
   import { useAuthStore } from '@/stores/useLoginAuth';
-  import router from '@/router';
 
   const login = useAuthStore();
-
-  const handleSubmit = () => {
-    if (login.email === 'admin@example.com' && login.password === 'password') {
-      localStorage.setItem('userType', 'admin');
-      router.push('/home');
-    } else if (login.email === 'user@example.com' && login.password === 'password') {
-      localStorage.setItem('userType', 'user');
-      router.push('/home');
-    } else {
-      login.error = true;
-    }
-  };
 </script>
