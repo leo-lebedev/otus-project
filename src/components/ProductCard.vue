@@ -1,5 +1,5 @@
 <template>
-  <div class="w-[300px]">
+  <div class="w-[300px] product-card">
     <img :alt="product.title" :src="product.image" class="max-w-[300px] h-[300px]" />
     <div>
       <h3 class="text-xl font-bold mb-1">{{ product.title }}</h3>

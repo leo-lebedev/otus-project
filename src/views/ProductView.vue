@@ -40,8 +40,6 @@
 
   const isProductModal = ref(false);
 
-  // const userType = localStorage.getItem('userType');
-
   const isAdmin = computed(() => localStorage.getItem('userType') === 'admin');
 
   const filteredItems = computed(() => {
